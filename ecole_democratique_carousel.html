@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>École Démocratique de Paris - Événements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .carousel-container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-wrapper {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide {
+            min-width: 100%;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .slide1 {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+        }
+
+        .slide1::before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white"/><circle cx="80" cy="30" r="1.5" fill="white"/><circle cx="60" cy="70" r="2.5" fill="white"/><circle cx="30" cy="80" r="1" fill="white"/></svg>');
+        }
+
+        .slide2 {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .slide2::before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="10,10 20,30 0,30" fill="white"/><polygon points="80,60 90,80 70,80" fill="white"/><polygon points="50,20 60,40 40,40" fill="white"/></svg>');
+        }
+
+        .slide3 {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #2c3e50;
+        }
+
+        .slide3::before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="10" y="10" width="15" height="15" fill="rgba(44,62,80,0.3)" transform="rotate(45 17.5 17.5)"/><rect x="70" y="60" width="10" height="10" fill="rgba(44,62,80,0.3)" transform="rotate(45 75 65)"/></svg>');
+        }
+
+        .event-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .slide3 .event-icon {
+            background: rgba(44,62,80,0.1);
+        }
+
+        .event-type {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .event-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .event-details {
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
+        }
+
+        .slide3 .event-details {
+            background: rgba(44,62,80,0.08);
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .cta-button {
+            background: rgba(255,255,255,0.25);
+            color: inherit;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .slide3 .cta-button {
+            background: rgba(44,62,80,0.1);
+            border-color: rgba(44,62,80,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.35);
+        }
+
+        .slide3 .cta-button:hover {
+            background: rgba(44,62,80,0.15);
+        }
+
+        .carousel-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: rgba(255,255,255,0.9);
+            transform: scale(1.2);
+        }
+
+        .carousel-arrows {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-arrows:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev {
+            left: 15px;
+        }
+
+        .next {
+            right: 15px;
+        }
+
+        .school-info {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            color: #2c3e50;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .contact-item a {
+            color: #74b9ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: #0984e3;
+            text-decoration: underline;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .event-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @media (max-width: 480px) {
+            .carousel-container {
+                margin: 10px;
+            }
+            
+            .slide {
+                padding: 30px 20px;
+            }
+            
+            .event-title {
+                font-size: 24px;
+            }
+            
+            .detail-item {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-container">
+        <div class="school-info">
+            🎓 Inscriptions 2025/2026 ouvertes !
+        </div>
+        
+        <div class="carousel-wrapper">
+            <div class="carousel-slides" id="slides">
+                <!-- Slide 1: Journée Portes Ouvertes -->
+                <div class="slide slide1">
+                    <div class="slide-content">
+                        <div class="event-icon">🏫</div>
+                        <div class="event-type">Journée Portes Ouvertes</div>
+                        <h2 class="event-title">Découvrez notre école !</h2>
+                        <div class="event-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📅</span>
+                                Samedi 21 juin • 15h-17h
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                Paris 19e • Entrée libre
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">🌟</span>
+                                Pédagogie libre & bienveillante
+                            </div>
+                        </div>
+                        <a href="https://ecole-democratique-paris.org/nous-contacter" target="_blank" class="cta-button">Venez nous rencontrer !</a>
+                    </div>
+                </div>
+
+                <!-- Slide 2: Réunion publique -->
+                <div class="slide slide2">
+                    <div class="slide-content">
+                        <div class="event-icon">💬</div>
+                        <div class="event-type">Réunion Publique</div>
+                        <h2 class="event-title">Échangeons ensemble</h2>
+                        <div class="event-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📅</span>
+                                Jeudi 26 juin • 18h-20h
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">🏫</span>
+                                École Démocratique de Paris
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">🗣️</span>
+                                Présentation + Q&A
+                            </div>
+                        </div>
+                        <a href="https://ecole-democratique-paris.org/nous-contacter" target="_blank" class="cta-button">Participez aux échanges</a>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Webinaire -->
+                <div class="slide slide3">
+                    <div class="slide-content">
+                        <div class="event-icon">🌐</div>
+                        <div class="event-type">Webinaire en ligne</div>
+                        <h2 class="event-title">Connectez-vous à distance</h2>
+                        <div class="event-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📅</span>
+                                Mercredi 3 juillet • 18h-20h
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">💻</span>
+                                Sur Jitsi (lien sur inscription)
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">📩</span>
+                                Demandez le lien en DM !
+                            </div>
+                        </div>
+                        <a href="https://ecole-democratique-paris.org/nous-contacter" target="_blank" class="cta-button">Demander le lien</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="carousel-arrows prev" onclick="previousSlide()">‹</button>
+        <button class="carousel-arrows next" onclick="nextSlide()">›</button>
+
+        <div class="carousel-nav">
+            <div class="nav-dot active" onclick="goToSlide(0)"></div>
+            <div class="nav-dot" onclick="goToSlide(1)"></div>
+            <div class="nav-dot" onclick="goToSlide(2)"></div>
+        </div>
+
+        <div class="contact-info">
+            <div class="contact-item">
+                <span class="contact-icon">🌐</span>
+                <a href="https://ecole-democratique-paris.org/" target="_blank">ecole-democratique-paris.org</a>
+            </div>
+            <div class="contact-item">
+                <span class="contact-icon">📧</span>
+                <a href="mailto:info@ecole-democratique-paris.org">info@ecole-democratique-paris.org</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 3;
+        const slidesContainer = document.getElementById('slides');
+        const dots = document.querySelectorAll('.nav-dot');
+
+        function updateCarousel() {
+            const translateX = -currentSlide * 100;
+            slidesContainer.style.transform = `translateX(${translateX}%)`;
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function previousSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        // Auto-slide every 6 seconds
+        setInterval(nextSlide, 6000);
+
+        // Touch/swipe support for mobile
+        let startX = 0;
+        let endX = 0;
+
+        slidesContainer.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        slidesContainer.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            if (startX - endX > 50) {
+                nextSlide();
+            } else if (endX - startX > 50) {
+                previousSlide();
+            }
+        });
+    </script>
+</body>
+</html>
