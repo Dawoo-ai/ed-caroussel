@@ -17,7 +17,7 @@
     }
     .carousel-container {
       width: 100%;
-      max-width: 540px;           /* ← increased from 500px */
+      max-width: 500px;
       background: white;
       border-radius: 25px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.2);
@@ -31,13 +31,13 @@
     }
     .slide {
       min-width: 100%;
-      padding: 40px 80px;         /* ← more left/right padding */
+      padding: 40px 60px;
       text-align: center;
       position: relative;
       overflow: hidden;
     }
     @media (max-width: 480px) {
-      .slide { padding: 30px 50px; } /* slightly less on small */
+      .slide { padding: 30px 40px; }
       .slide-title { font-size: 22px; }
       .slide-text  { font-size: 14px; }
     }
@@ -168,10 +168,11 @@
       transform: translateY(-50%);
       background: rgba(255,255,255,0.2);
       border: 1px solid rgba(255,255,255,0.3);
-      width: 30px; height: 30px;
+      width: 30px;  /* smaller */
+      height: 30px; /* smaller */
       border-radius: 50%;
       color: white;
-      font-size: 16px;
+      font-size: 16px; /* smaller arrow glyph */
       line-height: 30px;
       text-align: center;
       cursor: pointer;
@@ -183,8 +184,8 @@
       background: rgba(255,255,255,0.3);
       transform: translateY(-50%) scale(1.1);
     }
-    .prev { left: -25px; }   /* ← more space */
-    .next { right: -25px; }  /* ← more space */
+    .prev { left: -10px; }
+    .next { right: -10px; }
 
     .myth-number {
       position: absolute;
@@ -199,6 +200,7 @@
       backdrop-filter: blur(10px);
       z-index: 10;
     }
+
     @keyframes float {
       0%,100% { transform: translateY(0); }
       50%     { transform: translateY(-10px); }
@@ -231,7 +233,7 @@
             <div class="slide-type">La réalité</div>
             <h2 class="slide-title">Les enfants sont des apprenants naturels !</h2>
             <div class="slide-text">
-              Les enfants apprennent constamment par eux-mêmes : marcher, parler, comprendre le monde…
+              Les enfants apprennent constamment par eux-mêmes : marcher, parler, comprendre le monde...
               L'apprentissage autonome est plus profond et durable car il répond à leur curiosité naturelle.
               Notre rôle n'est pas d'enseigner, mais d'accompagner cette soif d'apprendre.
             </div>
@@ -264,15 +266,18 @@
               </div>
             </div>
             <a href="https://ecole-democratique-paris.org/nous-contacter"
-               target="_blank" class="cta-button">
+               target="_blank"
+               class="cta-button">
                Découvrir notre approche
             </a>
           </div>
         </div>
       </div>
     </div>
+
     <button class="carousel-arrows prev" onclick="previousSlide()">‹</button>
     <button class="carousel-arrows next" onclick="nextSlide()">›</button>
+
     <div class="carousel-nav">
       <div class="nav-dot active" onclick="goToSlide(0)"></div>
       <div class="nav-dot" onclick="goToSlide(1)"></div>
@@ -300,9 +305,8 @@
     slidesContainer.addEventListener('touchstart', e => startX = e.touches[0].clientX);
     slidesContainer.addEventListener('touchend',   e => {
       endX = e.changedTouches[0].clientX;
-      startX - endX > 50 ? nextSlide()
-        : endX - startX > 50 ? previousSlide()
-        : null;
+      if (startX - endX > 50) nextSlide();
+      else if (endX - startX > 50) previousSlide();
     });
   </script>
 </body>
